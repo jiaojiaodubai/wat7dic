@@ -1,0 +1,13 @@
+.el-descriptions {
+  display: block;
+  overflow-x: auto;
+}
+
+.el-descriptions table {
+  display: table;
+}
+
+.el-descriptions > .el-descriptions__body > table > tbody > tr > .is-bordered-label {
+  font-weight: bold;
+  white-space: nowrap;
+}
