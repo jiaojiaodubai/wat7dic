@@ -11,9 +11,9 @@ showSearch: true
 <!-- markdownlint-disable -->
 
 <script setup>
-import Info from './components/detail/Info.vue'
-import Heading from './components/detail/Heading.vue'
-import Meanings from './components/detail/Meanings.vue'
+import Info from '../components/detail/Info.vue'
+import Heading from '../components/detail/Heading.vue'
+import Meanings from '../components/detail/Meanings.vue'
 </script>
 
 # <Heading />

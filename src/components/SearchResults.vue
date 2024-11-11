@@ -71,7 +71,7 @@
           共找到 {{ results.length }} 条结果
         </el-text>
         <el-space direction="vertical">
-          <a v-for="entry in results" :href="entry.id">
+          <a v-for="entry in results" :href="`./entry/${entry.id}`">
             <DetailCard :entry="entry" />
           </a>
         </el-space>

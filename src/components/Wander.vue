@@ -46,7 +46,7 @@ const results = computed(() => {
       <el-slider v-model="cardCounts" :min="1" :max="25" show-input @change="onChanged" />
     </div>
     <el-space direction="vertical">
-      <a v-for="entry in results" :href="entry.id">
+      <a v-for="entry in results" :href="`./entry/${entry.id}`">
         <DetailCard :entry="entry" />
       </a>
     </el-space>
