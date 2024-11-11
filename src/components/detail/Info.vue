@@ -36,7 +36,7 @@ const codes = entry.unicode.match(/U\+[A-F\d]+/g)
       </template>
     </el-descriptions-item>
     <el-descriptions-item label="选字争议性">
-      {{ ["几乎无争议", "存在共识", "尚无定论"][entry.controversial] }}
+      {{ ["几乎无争议", "强行训读", "争议较大"][entry.controversial] }}
     </el-descriptions-item>
     <el-descriptions-item label="更多读音" :span="2">
       <el-space>
