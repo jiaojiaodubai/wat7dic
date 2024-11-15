@@ -12,6 +12,10 @@ import Inspect from 'vite-plugin-inspect'
 const pathSrc = path.resolve('./src/types')
 
 export default defineConfig({
+  define: {
+    // 启用生产环境构建下激活不匹配的详细警告
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',
+  },
   plugins: [
     AutoImport({
       // Auto import functions from Vue, e.g. ref, reactive, toRef...

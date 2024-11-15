@@ -3,7 +3,7 @@
   import HeadTailSearch from './HeadTailSearch.vue'
   import { useUrlSearchParams } from '@vueuse/core'
   import { toUrlTerm } from '../composables/utils'
-  import { useRouter } from 'vitepress';
+  import { useData, useRouter } from 'vitepress';
 
   const params: SearchParma = useUrlSearchParams('history')
   // 为了方便地设置安全默认值
@@ -25,10 +25,11 @@
     urlTerm.value = toUrlTerm(urlMethod.value, text.value, heads.value, tail.value);
   })
 
+  const { site } = useData()
   const router = useRouter()
   function doSearch() {
     /* 使用自行维护的变量来构造路由参数，以便可以在详情页进行搜索 */
-    router.go(`./searchResults?${new URLSearchParams({
+    router.go(`.${site.value.base ? site.value.base : '/'}searchResults?${new URLSearchParams({
       method: urlMethod.value,
       term: toUrlTerm(urlMethod.value, text.value, heads.value, tail.value)
     }).toString()}`);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import type { Ref } from 'vue'
-  import { useRouter } from 'vitepress'
+  import { useRouter, useData } from 'vitepress'
   import TextSearch from './TextSearch.vue'
   import HeadTailSearch from './HeadTailSearch.vue'
   import { toUrlTerm } from '../composables/utils'
@@ -10,9 +10,10 @@
   const heads: Ref<string[]> = ref([])
   const tail: Ref<string> = ref('')
 
+  const { site } = useData()
   const router = useRouter()
   function doSearch() {
-    router.go(`./searchResults?${new URLSearchParams({
+    router.go(`.${site.value.base ? site.value.base : '/'}searchResults?${new URLSearchParams({
       method: method.value,
       term: toUrlTerm(method.value, text.value, heads.value, tail.value)
     }).toString()}`);
