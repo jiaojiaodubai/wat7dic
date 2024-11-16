@@ -13,9 +13,9 @@ import { flatten } from '../composables/utils';
 </script>
 
 <template>
-  <el-card shadow="hover" style="width: 500px;">
+  <el-card shadow="hover">
     <template #header>
-      <el-text size="large" style="font-weight: bold;">
+      <el-text type="primary" size="large" tag="b">
         {{ entry.characters[0] }}
       </el-text>
       <template v-if="entry.characters.length > 1">
@@ -40,10 +40,10 @@ import { flatten } from '../composables/utils';
       <el-descriptions-item label="Jyutping++" :span="2">
         {{ entry.jyutping }}
       </el-descriptions-item>
-      <el-descriptions-item label="声母" width="129.18px">
+      <el-descriptions-item label="声母" width="9rem">
         {{ entry.head.toUpperCase() }}
       </el-descriptions-item>
-      <el-descriptions-item label="韵尾" width="129.18px">
+      <el-descriptions-item label="韵尾" width="9rem">
         {{ entry.tail }}
       </el-descriptions-item>
       <el-descriptions-item label="组词">

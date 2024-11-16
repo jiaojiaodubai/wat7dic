@@ -14,7 +14,7 @@ const { frontmatter } = useData()
 <template>
   <Layout>
     <template #home-hero-info-after>
-      <MainSearch />
+      <MainSearch style="padding-top: 32px; padding-bottom: 6px;" />
     </template>
     <template #nav-bar-content-before>
       <NavSearch v-if="frontmatter.showSearch === true" />

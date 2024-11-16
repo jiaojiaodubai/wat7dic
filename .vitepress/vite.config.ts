@@ -8,10 +8,21 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import Inspect from 'vite-plugin-inspect'
+import { fileURLToPath, URL } from 'node:url'
 
 const pathSrc = path.resolve('./src/types')
 
 export default defineConfig({
+  resolve: {
+    alias: [
+      {
+        find: /^VPNavBarSearch\.vue$/,
+        replacement: fileURLToPath(
+          new URL('./components/NavSearch.vue', import.meta.url)
+        )
+      }
+    ]
+  },
   define: {
     // 启用生产环境构建下激活不匹配的详细警告
     __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: 'true',

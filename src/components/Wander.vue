@@ -65,7 +65,9 @@ const results = computed(() => {
 }
 
 .slider {
-  min-width: 500px;
+  width: 547px;
+  max-width: 100%;
+  min-width: 320px;
   display: flex;
   flex-wrap: nowrap;
   justify-content: center;

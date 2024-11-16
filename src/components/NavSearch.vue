@@ -1,9 +1,16 @@
 <script setup lang="ts">
   import TextSearch from './TextSearch.vue'
   import HeadTailSearch from './HeadTailSearch.vue'
-  import { useUrlSearchParams } from '@vueuse/core'
+  import MainSearch from '../components/MainSearch.vue'
+  import { useUrlSearchParams, useWindowSize } from '@vueuse/core'
   import { toUrlTerm } from '../composables/utils'
   import { useData, useRouter } from 'vitepress';
+  import { Search } from '@element-plus/icons-vue'
+
+  const { width } = useWindowSize()
+  const isMobile = computed(() => width.value < 900);
+
+  const isOpenDrawer = ref(false)
 
   const params: SearchParma = useUrlSearchParams('history')
   // 为了方便地设置安全默认值
@@ -37,11 +44,15 @@
 </script>
 
 <template>
-  <div style="
-    padding-left: 32px;
-    display: inline-flex;
-    align-items: center;
-  ">
+  <el-drawer v-model="isOpenDrawer" direction="ttb" :with-header="false" size="18%">
+    <MainSearch />
+  </el-drawer>
+  <div v-if="isMobile" class="VPNavBarSearch">
+    <el-icon style="vertical-align: middle" @click="isOpenDrawer = true" >
+      <Search />
+    </el-icon>
+  </div>
+  <div v-else class="VPNavBarSearch">
      <el-select
       v-model="urlMethod"
       style="width: 110px"
@@ -69,8 +80,21 @@
 </template>
 
 <style scoped>
-.search-module {
-  max-width: 650px;
-  min-width: 650px;
+.VPNavBarSearch {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .VPNavBarSearch {
+    flex-grow: 1;
+    padding-left: 24px;
+  }
+}
+
+@media (min-width: 960px) {
+  .VPNavBarSearch {
+    padding-left: 32px;
+  }
 }
 </style>

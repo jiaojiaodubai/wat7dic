@@ -65,18 +65,17 @@ function sendHeadTail() {
 <template>
   <div style="display: inline-flex;flex-direction:row;">
     <el-select v-model="choosedHeads" multiple :multiple-limit="5" clearable placeholder="选择声母" :size="props.size"
-      style="flex-grow: 1;">
+      style="flex-grow: 1;min-width: 24rem;">
       <el-option v-for="(str, index) in heads" :key="index" :label="str" :value="str" />
     </el-select>
-    <el-select v-model="choosedTail" placeholder="选择韵尾" :size="props.size" style="width: 160px">
+    <el-select v-model="choosedTail" placeholder="选择韵尾" :size="props.size" style="width: 30%; min-width: 7rem;">
       <el-option v-for="(str, index) in tails" :key="index" :label="str" :value="str" />
     </el-select>
-    <div>
-      <el-button :icon="Search" :size="props.size" @click="sendHeadTail" style="
-          color: var(--el-color-info);
-          background-color: var(--el-fill-color-light);
-          border-color: var(--el-button-border-color);
-        " />
-    </div>
+    <el-button :icon="Search" :size="props.size" @click="sendHeadTail"
+      style="
+        color: var(--el-color-info);
+        background-color: var(--el-fill-color-light);
+        border-color: var(--el-button-border-color);
+      " />
   </div>
 </template>
