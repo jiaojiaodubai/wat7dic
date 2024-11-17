@@ -39,8 +39,8 @@
         @query="doSearch"
       />
     </el-tab-pane>
-    <el-tab-pane name="manul"label="手写输入" disabled></el-tab-pane>
-    <el-tab-pane name="voice" label="语音识别" disabled></el-tab-pane>
+    <!-- <el-tab-pane name="manul"label="手写输入" disabled></el-tab-pane>
+    <el-tab-pane name="voice" label="语音识别" disabled></el-tab-pane> -->
   </el-tabs>
 </template>
 
