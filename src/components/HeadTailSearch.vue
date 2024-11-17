@@ -64,8 +64,7 @@ function sendHeadTail() {
 
 <template>
   <div style="display: inline-flex;flex-direction:row;">
-    <el-select v-model="choosedHeads" multiple :multiple-limit="5" clearable placeholder="选择声母" :size="props.size"
-      style="flex-grow: 1;min-width: 7em;">
+    <el-select class="head-select" v-model="choosedHeads" multiple :multiple-limit="5" clearable placeholder="选择声母" :size="props.size">
       <el-option v-for="(str, index) in heads" :key="index" :label="str" :value="str" />
     </el-select>
     <el-select v-model="choosedTail" placeholder="选择韵尾" :size="props.size" style="width: 30%; min-width: 7em;">
@@ -79,3 +78,17 @@ function sendHeadTail() {
       " />
   </div>
 </template>
+
+<style scoped>
+.head-select {
+  flex-grow: 1;
+  min-width: 24em;
+}
+
+@media (max-width: 899px) {
+  .head-select {
+    flex-grow: 1;
+    min-width: 7em;
+  }
+}
+</style>

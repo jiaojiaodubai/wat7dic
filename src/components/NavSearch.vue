@@ -44,7 +44,7 @@
 </script>
 
 <template>
-  <el-drawer v-model="isOpenDrawer" direction="ttb" :with-header="false" size="18%">
+  <el-drawer v-model="isOpenDrawer" direction="ttb" :with-header="false" size="35%">
     <MainSearch />
   </el-drawer>
   <div v-if="isMobile" class="VPNavBarSearch">

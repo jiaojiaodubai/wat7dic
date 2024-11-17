@@ -30,8 +30,9 @@
 <template>
   <div>
     <el-input
+      class="text-input"
       v-model="text"
-      placeholder="请输入汉字（如“玉”）、粤拼扩展（如“njut9”）或Unicode（如“U+7389”）"
+      placeholder="请输入汉字（如“玉”）、粤拼扩展（如“njuk9”）或Unicode（如“U+7389”）"
       :size="props.size"
       clearable
       @keydown.enter="sendText"
@@ -42,3 +43,15 @@
     </el-input>
   </div>
 </template>
+
+<style scoped>
+.text-input {
+  min-width: 542px;
+}
+
+@media (max-width: 899px) {
+  .text-input {
+    min-width: 278px;
+  }
+}
+</style>
