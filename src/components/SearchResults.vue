@@ -25,6 +25,7 @@
       griddle.id = extract(/U\+[A-F\d]{4}-[a-z]+\d{0,2}|A\+[a-z]+\d{0,2}|[WP]\+\d+-([a-z]+\d{0,2})+/g);
       griddle.unicode = extract(/U\+[A-F\d]{4}/g);
       griddle.jyutping = extract(/[a-z]+\d{0,2}/g);
+      console.log(griddle.jyutping);
       griddle.characters = extract(/[\u4e00-\u9fff]+/g);
     } else if (method.value === 'headTail') {
       griddle.head = term.value.split(';')[0].split(',');
@@ -37,7 +38,7 @@
     return entries.filter(entry => {
       return griddle.value.id?.includes(entry.id) ||
         griddle.value.unicode?.includes(entry.unicode) ||
-        griddle.value.jyutping?.includes(entry.jyutping) ||
+        griddle.value.jyutping?.some(gPing => /\d+$/.test(gPing) ? gPing == entry.jyutping : gPing == entry.jyutping.replace(/\d+$/, '')) ||
         griddle.value.characters?.some(gChar =>
           entry.characters.includes(gChar) ||
           entry.characters.some(eCHar => eCHar.includes(gChar))
