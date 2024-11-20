@@ -20,6 +20,9 @@ importers:
       fs-extra:
         specifier: ^11.2.0
         version: 11.2.0
+      opencc-js:
+        specifier: ^1.0.5
+        version: 1.0.5
       unplugin-icons:
         specifier: ^0.20.1
         version: 0.20.1(@vue/compiler-sfc@3.5.12)
@@ -1291,6 +1294,9 @@ packages:
   open@10.1.0:
     resolution: {integrity: sha512-mnkeQ1qP5Ue2wd+aivTD3NHd/lZ96Lu0jgf0pwktLPtx6cTZiH7tyeGRRHs0zX0rbrahXPnXlUnbeXyaBBuIaw==, tarball: https://registry.npmmirror.com/open/-/open-10.1.0.tgz}
     engines: {node: '>=18'}
+
+  opencc-js@1.0.5:
+    resolution: {integrity: sha512-LD+1SoNnZdlRwtYTjnQdFrSVCAaYpuDqL5CkmOaHOkKoKh7mFxUicLTRVNLU5C+Jmi1vXQ3QL4jWdgSaa4sKjg==, tarball: https://registry.npmmirror.com/opencc-js/-/opencc-js-1.0.5.tgz}
 
   optionator@0.9.4:
     resolution: {integrity: sha512-6IpQ7mKUxRcZNLIObR0hz7lxsapSSIYNZJwXPGeF0mTVqGKFIXj1DQcMoT22S3ROcLyY/rz0PWaWZ9ayWmad9g==, tarball: https://registry.npmmirror.com/optionator/-/optionator-0.9.4.tgz}
@@ -2934,6 +2940,8 @@ snapshots:
       define-lazy-prop: 3.0.0
       is-inside-container: 1.0.0
       is-wsl: 3.1.0
+
+  opencc-js@1.0.5: {}
 
   optionator@0.9.4:
     dependencies:

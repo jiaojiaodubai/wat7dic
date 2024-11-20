@@ -6,6 +6,7 @@
     "@tsconfig/node22": "^22.0.0",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.9.0",
+    "@types/opencc-js": "^1.0.3",
     "@vue/tsconfig": "^0.6.0",
     "eslint": "^9.15.0",
     "eslint-plugin-vue": "^9.31.0",
@@ -28,6 +29,7 @@
     "@vueuse/core": "^11.2.0",
     "element-plus": "^2.8.7",
     "fs-extra": "^11.2.0",
+    "opencc-js": "^1.0.5",
     "unplugin-icons": "^0.20.1"
   }
 }

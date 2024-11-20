@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { useUrlSearchParams } from '@vueuse/core'
   import { data as entries } from '../searchEntries.data'
+  import * as OpenCC from 'opencc-js'
   import DetailCard from './EntryCard.vue'
 
   const params: SearchParma = useUrlSearchParams('history')
@@ -34,14 +35,14 @@
     return griddle;
   });
 
+  const converter = OpenCC.Converter({from: 'tw', to: 'cn'})
   const results = computed(() => {
     return entries.filter(entry => {
       return griddle.value.id?.includes(entry.id) ||
         griddle.value.unicode?.includes(entry.unicode) ||
         griddle.value.jyutping?.some(gPing => /\d+$/.test(gPing) ? gPing == entry.jyutping : gPing == entry.jyutping.replace(/\d+$/, '')) ||
         griddle.value.characters?.some(gChar =>
-          entry.characters.includes(gChar) ||
-          entry.characters.some(eCHar => eCHar.includes(gChar))
+          entry.characters.some(eCHar => converter(eCHar).includes(gChar))
         ) ||
         (griddle.value.head?.includes(entry.head) && griddle.value.tail == entry.tail);
     })
