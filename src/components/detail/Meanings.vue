@@ -22,37 +22,39 @@ const entry = params.value?.entry as Entry
     </div>
     <!-- el-text.line-height: 24; el-tag.height: 32, padding-top = (32-24)/2 -->
     <div clase="content" style="padding-top: 4px;">
-      <div class="description">
+      <div v-if="meaning.descriptions.zh.length" class="description" style="padding-bottom: 10px;">
         <LinkedText :list="meaning.descriptions.zh" type="success" size="large" />
         <br />
         <el-text type="info" size="large">
           {{ flatten(meaning.descriptions.en) }}
         </el-text>
       </div>
-      <div v-for="word in meaning.words" class="word" style="padding-top: 10px;">
-        <div v-if="flatten(word.format) !== entry.characters[0]" class="word">
-          <div class="hanging">
-            <div class="order">
-              <el-tag type="primary" effect="dark" round style="font-size: 1rem;">
-                {{ flatten(word.format) }}
-              </el-tag>
-            </div>
-            <div class="content">
-              <div class="description">
-                <LinkedText :list="word.descriptions.zh" type="primary" />
-                <br />
-                <el-text type="info">
-                  {{ flatten(word.descriptions.en) }}
-                </el-text>
+      <el-space direction="vertical" :size="10" alignment="start">
+        <div v-for="word in meaning.words" class="word">
+          <div v-if="flatten(word.format) !== entry.characters[0]" class="word">
+            <div class="hanging">
+              <div class="order">
+                <el-tag type="primary" effect="dark" round style="font-size: 1rem;">
+                  {{ flatten(word.format) }}
+                </el-tag>
               </div>
-              <Sentences v-model="word.sentences" />
+              <div class="content">
+                <div class="description">
+                  <LinkedText :list="word.descriptions.zh" type="primary" />
+                  <br />
+                  <el-text type="info">
+                    {{ flatten(word.descriptions.en) }}
+                  </el-text>
+                </div>
+                <Sentences v-model="word.sentences" />
+              </div>
             </div>
           </div>
+          <div v-else>
+            <Sentences v-model="word.sentences" />
+          </div>
         </div>
-        <div v-else>
-          <Sentences v-model="word.sentences" />
-        </div>
-      </div>
+      </el-space>
     </div>
   </div>
 </template>
