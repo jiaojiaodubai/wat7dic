@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useData } from 'vitepress'
+import { capitalize } from 'vue';
 
 const params = useData().params
 const ID = params.value?.id as string
@@ -23,7 +24,7 @@ const codes = entry.unicode.match(/U\+[A-F\d]+/g)
       {{ entry.pinyin }}
     </el-descriptions-item>
     <el-descriptions-item label="声母">
-      {{ entry.head.toUpperCase() }}
+      {{ capitalize(entry.head) }}
     </el-descriptions-item>
     <el-descriptions-item label="韵尾">
       {{ entry.tail }}

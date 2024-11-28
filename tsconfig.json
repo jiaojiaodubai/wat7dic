@@ -15,6 +15,7 @@
     "allowJs": true,
     "strict": true,
     "jsx": "preserve",
+    "lib": ["esnext", "dom"],
 
     "baseUrl": ".",
     "paths": {

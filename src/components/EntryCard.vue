@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { capitalize } from 'vue';
 import { flatten } from '../composables/utils';
 
   const props = defineProps<{
@@ -41,7 +42,7 @@ import { flatten } from '../composables/utils';
         {{ entry.jyutping }}
       </el-descriptions-item>
       <el-descriptions-item label="声母" width="9rem">
-        {{ entry.head.toUpperCase() }}
+        {{ capitalize(entry.head) }}
       </el-descriptions-item>
       <el-descriptions-item label="韵尾" width="9rem">
         {{ entry.tail }}
