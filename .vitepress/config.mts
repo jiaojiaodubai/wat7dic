@@ -7,6 +7,7 @@ export default defineConfig({
   description: "一个在线玉林话字典",
   lang: "zh-CN",
   srcDir: "./src",
+  base: '/wat7dic/',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
