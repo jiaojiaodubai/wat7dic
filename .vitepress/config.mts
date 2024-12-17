@@ -8,7 +8,7 @@ export default defineConfig({
   lang: "zh-CN",
   srcDir: "./src",
   transformHead({ assets }) {
-    const babelFont = assets.find(file => /BabelStoneHan\.\w+\.woff2$/.test(file))
+    const babelFont = assets.find(file => /BabelStoneHan\.\w+\.woff$/.test(file))
     if (babelFont) {
       return [
         [
@@ -17,7 +17,7 @@ export default defineConfig({
             rel: 'preload',
             href: babelFont,
             as: 'font',
-            type: 'font/woff2',
+            type: 'font/woff',
             crossorigin: ''
           }
         ]
