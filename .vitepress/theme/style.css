@@ -3,6 +3,19 @@
  * https://github.com/vuejs/vitepress/blob/main/src/client/theme-default/styles/vars.css
  */
 
+
+@font-face {
+  font-family: BabelStone;
+  src: url('/BabelStoneHan.woff2') format('woff2');
+  font-display: swap;
+}
+
+:root:where(:lang(zh)) {
+  --vp-font-family-base: 'Punctuation SC', 'Inter', 'BabelStone', ui-sans-serif, system-ui,
+    sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+    'Noto Color Emoji';
+}
+
 /**
  * Colors
  *

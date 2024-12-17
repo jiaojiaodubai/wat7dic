@@ -1,10 +1,10 @@
 import type { Theme } from 'vitepress'
-import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from 'vitepress/theme-without-fonts'
 import './style.css'
 import './custom.css'
 // https://element-plus.org/zh-CN/guide/dark-mode.html
 import 'element-plus/theme-chalk/dark/css-vars.css'
-import CustomLayout from "./LayoutPatcher.vue";
+import CustomLayout from "./LayoutPatcher.vue"
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 

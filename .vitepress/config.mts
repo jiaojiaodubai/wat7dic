@@ -7,6 +7,23 @@ export default defineConfig({
   description: "一个在线玉林话字典",
   lang: "zh-CN",
   srcDir: "./src",
+  transformHead({ assets }) {
+    const babelFont = assets.find(file => /BabelStoneHan\.\w+\.woff2$/.test(file))
+    if (babelFont) {
+      return [
+        [
+          'link',
+          {
+            rel: 'preload',
+            href: babelFont,
+            as: 'font',
+            type: 'font/woff2',
+            crossorigin: ''
+          }
+        ]
+      ]
+    }
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
