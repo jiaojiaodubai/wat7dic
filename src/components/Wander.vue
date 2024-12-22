@@ -1,78 +1,139 @@
 <script setup lang="ts">
-import { useUrlSearchParams, useResizeObserver } from '@vueuse/core'
+import { useResizeObserver, useUrlSearchParams } from '@vueuse/core'
 import { data as entries } from '../searchEntries.data'
 import DetailCard from './EntryCard.vue'
 
 const cardCounts = ref(5)
+const subDBs = {
+  Common: '通用字',
+  WriteableChars: '特色字',
+  WriteableWords: '特色词',
+  UnwriteableChars: '有音无字',
+  Pended: '写法待定',
+}
+const subDBFilter = ref<string[]>(Object.keys(subDBs))
 
 const params = useUrlSearchParams()
 
 const ids: Ref<string[]> = ref([])
 
 function updateUrl() {
-  params.ids = ids.value.join(',');
+  params.ids = ids.value.join(',')
 }
 
 function updateIds(reset: boolean = false) {
-  if (reset) ids.value = [];
+  if (reset)
+    ids.value = []
   while (ids.value.length < cardCounts.value) {
-    const randomIndex = Math.floor(Math.random() * entries.length);
-    const randomId = entries[randomIndex].id;
-    if (!ids.value.includes(randomId)) {
-      ids.value.push(randomId);
+    const randomIndex = Math.floor(Math.random() * entries.length)
+    const entry = entries[randomIndex]
+    const randomId = entry.id
+    if (!ids.value.includes(randomId) && subDBFilter.value.includes(entry.subDB)) {
+      ids.value.push(randomId)
     }
   }
-  console.log(`ids: ${ids.value}`);
-  updateUrl();
+  updateUrl()
 }
 
 if (typeof params.ids === 'string' && params.ids.length) {
-  ids.value = params.ids.split(',');
-  cardCounts.value = ids.value.length;
-} else {
-  updateIds(true);
+  ids.value = params.ids.split(',')
+  cardCounts.value = ids.value.length
+}
+else {
+  updateIds(true)
 }
 
-function onChanged() {
+function onCardCountsChange() {
   if (cardCounts.value < ids.value.length) {
-    ids.value = ids.value.slice(0, cardCounts.value);
+    ids.value = ids.value.slice(0, cardCounts.value)
     // ids 截断时触发更新
-    updateUrl();
-  } else if (cardCounts.value > ids.value.length) {
-    updateIds();
+    updateUrl()
+  }
+  else if (cardCounts.value > ids.value.length) {
+    updateIds()
   }
 }
 
+function onSubDBFilterChange() {
+  ids.value = ids.value.filter((id: string) => {
+    const entry = entries.find(entry => entry.id === id)
+    return entry && (subDBFilter.value.includes(entry.subDB))
+  })
+  updateIds()
+}
+
 const results = computed(() => {
-  return entries.filter(entry => ids.value.includes(entry.id));
+  return entries.filter(entry => ids.value.includes(entry.id))
 })
 
 const cards = ref<HTMLElement | null>(null)
 const cardWidth = ref<number>(0)
 
 // 监听卡片尺寸变化,动态更改slider容器的宽度
-useResizeObserver(cards, (entries) => {
-  cardWidth.value = entries[0].contentRect.width;
+useResizeObserver(cards, (entryContainer) => {
+  if (entryContainer[0]) {
+    cardWidth.value = entryContainer[0].contentRect.width
+  }
 })
-
 </script>
 
 <template>
-  <div class="wander-view" >
-    <div class="slider" :style="{ width: cardWidth + 'px' }">
-      <el-text>词条数量：</el-text>
-      <el-slider v-model="cardCounts" :min="1" :max="25" show-input @change="onChanged" />
+  <div class="wander-view">
+    <div
+      id="toolbar"
+      :style="{ width: `${cardWidth}px` }"
+    >
+      <span id="cardCounts">
+        <el-text>词条数量：</el-text>
+        <el-input-number
+          v-model="cardCounts"
+          :min="1"
+          :max="25"
+          @change="onCardCountsChange"
+        />
+      </span>
+      <span id="subDBFilter">
+        <el-text>子数据库：</el-text>
+        <el-select
+          v-model="subDBFilter"
+          multiple
+          clearable
+          collapse-tags
+          collapse-tags-tooltip
+          placeholder="选择子数据库"
+          @change="onSubDBFilterChange"
+        >
+          <el-option
+            v-for="label, key in subDBs"
+            :key="key"
+            :label="label"
+            :value="key"
+          />
+        </el-select>
+      </span>
     </div>
-    <el-space direction="vertical" ref="cards">
-      <a v-for="entry in results" :href="`./entry/${entry.id}`">
+    <el-space
+      ref="cards"
+      direction="vertical"
+    >
+      <a
+        v-for="entry in results"
+        :key="entry.id"
+        :href="`./entry/${entry.id}`"
+      >
         <DetailCard :entry="entry" />
       </a>
     </el-space>
     <div>
-      <el-button @click="updateIds(true)">重新加载</el-button>
+      <el-button @click="updateIds(true)">
+        重新加载
+      </el-button>
     </div>
   </div>
-  <el-backtop :right="100" :bottom="100" />
+  <el-backtop
+    :right="100"
+    :bottom="100"
+  />
 </template>
 
 <style scoped>
@@ -82,18 +143,26 @@ useResizeObserver(cards, (entries) => {
   align-items: center;
 }
 
-.wander-view>:first-child, .wander-view>:last-child {
+.wander-view > :first-child, .wander-view > :last-child {
   padding-top: 8px;
   padding-bottom: 8px;
 }
 
-.slider {
+#toolbar {
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.slider>.el-text {
+#toolbar > span {
+  display: inline-flex;
+}
+
+#toolbar .el-text {
   white-space: nowrap;
+}
+
+#subDBFilter .el-select {
+  width: 11rem;
 }
 </style>

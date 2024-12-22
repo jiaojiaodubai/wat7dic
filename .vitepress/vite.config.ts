@@ -1,14 +1,14 @@
 // https://github.com/sxzz/element-plus-best-practices/blob/db2dfc983ccda5570033a0ac608a1bd9d9a7f658/vite.config.ts#L21-L58
 
-import path from 'path'
-import { defineConfig } from 'vite'
-import Icons from 'unplugin-icons/vite'
-import IconsResolver from 'unplugin-icons/resolver'
-import AutoImport from 'unplugin-auto-import/vite'
-import Components from 'unplugin-vue-components/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import Inspect from 'vite-plugin-inspect'
+import path from 'node:path'
 import { fileURLToPath, URL } from 'node:url'
+import AutoImport from 'unplugin-auto-import/vite'
+import IconsResolver from 'unplugin-icons/resolver'
+import Icons from 'unplugin-icons/vite'
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import Components from 'unplugin-vue-components/vite'
+import { defineConfig } from 'vite'
+import Inspect from 'vite-plugin-inspect'
 
 const pathSrc = path.resolve('./src/types')
 
@@ -18,10 +18,10 @@ export default defineConfig({
       {
         find: /^VPNavBarSearch\.vue$/,
         replacement: fileURLToPath(
-          new URL('./components/NavSearch.vue', import.meta.url)
-        )
-      }
-    ]
+          new URL('./components/NavSearch.vue', import.meta.url),
+        ),
+      },
+    ],
   },
   define: {
     // 启用生产环境构建下激活不匹配的详细警告

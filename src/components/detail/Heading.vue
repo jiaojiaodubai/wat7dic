@@ -11,7 +11,11 @@ const entry = params.value?.entry as Entry
     <el-space>
       <template v-for="(value, index) in entry.characters">
         <!-- Info https://element-plus.org/zh-CN/component/color.html -->
-        <span v-if="index > 0" style="color: #909399;">
+        <span
+          v-if="index > 0"
+          :key="index"
+          style="color: #909399;"
+        >
           {{ value }}
         </span>
       </template>

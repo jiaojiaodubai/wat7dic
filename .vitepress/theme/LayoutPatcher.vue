@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme'
 import { useData } from 'vitepress'
+import DefaultTheme from 'vitepress/theme'
 // 不能使用tsconfig.json中的路径别名
 import MainSearch from '../../src/components/MainSearch.vue'
 import NavSearch from '../../src/components/NavSearch.vue'
@@ -8,7 +8,6 @@ import NavSearch from '../../src/components/NavSearch.vue'
 const { Layout } = DefaultTheme
 // 为了使用响应式API，我们在组件中使用主题插槽，而不是在index.ts中
 const { frontmatter } = useData()
-
 </script>
 
 <template>

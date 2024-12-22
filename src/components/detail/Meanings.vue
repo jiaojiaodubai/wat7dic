@@ -1,19 +1,30 @@
 <script setup lang="ts">
 import { useData } from 'vitepress'
-import Sentences from './Sentences.vue'
-import LinkedText from './LinkedText.vue'
 import { flatten } from '../../composables/utils'
+import LinkedText from './LinkedText.vue'
+import Sentences from './Sentences.vue'
 
 const params = useData().params
 const entry = params.value?.entry as Entry
 </script>
 
 <template>
-  <div v-for="(meaning, index) in entry.meanings" class="meaning hanging" style="padding-top: 15px;">
+  <div
+    v-for="(meaning, mIndex) in entry.meanings"
+    :key="mIndex"
+    class="meaning hanging"
+    style="padding-top: 15px;"
+  >
     <div class="order">
-      <el-tag type="success" size="large" effect="dark" round style="font-weight: bold;width: 2rem;">
+      <el-tag
+        type="success"
+        size="large"
+        effect="dark"
+        round
+        style="font-weight: bold;width: 2rem;"
+      >
         <template v-if="entry.meanings.length > 1">
-          {{ index + 1 }}
+          {{ mIndex + 1 }}
         </template>
         <template v-else>
           义
@@ -21,27 +32,60 @@ const entry = params.value?.entry as Entry
       </el-tag>
     </div>
     <!-- el-text.line-height: 24; el-tag.height: 32, padding-top = (32-24)/2 -->
-    <div clase="content" style="padding-top: 4px;">
-      <div v-if="meaning.descriptions.zh.length" class="description" style="padding-bottom: 10px;">
-        <LinkedText :list="meaning.descriptions.zh" type="success" size="large" />
-        <br />
-        <el-text type="info" size="large">
+    <div
+      clase="content"
+      style="padding-top: 4px;"
+    >
+      <div
+        v-if="meaning.descriptions.zh.length"
+        class="description"
+        style="padding-bottom: 10px;"
+      >
+        <LinkedText
+          :list="meaning.descriptions.zh"
+          type="success"
+          size="large"
+        />
+        <br>
+        <el-text
+          type="info"
+          size="large"
+        >
           {{ flatten(meaning.descriptions.en) }}
         </el-text>
       </div>
-      <el-space direction="vertical" :size="10" alignment="start">
-        <div v-for="word in meaning.words" class="word">
-          <div v-if="flatten(word.format) !== entry.characters[0]" class="word">
+      <el-space
+        direction="vertical"
+        :size="10"
+        alignment="start"
+      >
+        <div
+          v-for="word, wIndex in meaning.words"
+          :key="wIndex"
+          class="word"
+        >
+          <div
+            v-if="flatten(word.format) !== entry.characters[0]"
+            class="word"
+          >
             <div class="hanging">
               <div class="order">
-                <el-tag type="primary" effect="dark" round style="font-size: 1rem;">
+                <el-tag
+                  type="primary"
+                  effect="dark"
+                  round
+                  style="font-size: 1rem;"
+                >
                   {{ flatten(word.format) }}
                 </el-tag>
               </div>
               <div class="content">
                 <div class="description">
-                  <LinkedText :list="word.descriptions.zh" type="primary" />
-                  <br />
+                  <LinkedText
+                    :list="word.descriptions.zh"
+                    type="primary"
+                  />
+                  <br>
                   <el-text type="info">
                     {{ flatten(word.descriptions.en) }}
                   </el-text>

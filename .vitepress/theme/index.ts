@@ -1,13 +1,12 @@
 import type { Theme } from 'vitepress'
+import ElementPlus from 'element-plus'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import DefaultTheme from 'vitepress/theme-without-fonts'
+import CustomLayout from './LayoutPatcher.vue'
 import './style.css'
 import './custom.css'
 // https://element-plus.org/zh-CN/guide/dark-mode.html
 import 'element-plus/theme-chalk/dark/css-vars.css'
-import CustomLayout from "./LayoutPatcher.vue"
-import ElementPlus from 'element-plus'
-import zhCn from 'element-plus/es/locale/lang/zh-cn'
-
 
 export default {
   extends: DefaultTheme,
@@ -17,5 +16,5 @@ export default {
     app.use(ElementPlus, {
       locale: zhCn,
     })
-  }
+  },
 } satisfies Theme

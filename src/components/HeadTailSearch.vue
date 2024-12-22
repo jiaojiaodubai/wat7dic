@@ -55,27 +55,54 @@ function sendHeadTail() {
     ElMessage({
       message: '输入无效，未选择声母或韵尾',
       type: 'warning',
-    });
-    return;
+    })
+    return
   }
-  emits('query', 'headTail');
+  emits('query', 'headTail')
 }
 </script>
 
 <template>
   <div style="display: inline-flex;flex-direction:row;">
-    <el-select class="head-select" v-model="choosedHeads" multiple :multiple-limit="5" clearable placeholder="选择声母" :size="props.size">
-      <el-option v-for="(str, index) in heads" :key="index" :label="str" :value="str" />
+    <el-select
+      v-model="choosedHeads"
+      class="head-select"
+      multiple
+      :multiple-limit="5"
+      clearable
+      placeholder="选择声母"
+      :size="props.size"
+    >
+      <el-option
+        v-for="(str, index) in heads"
+        :key="index"
+        :label="str"
+        :value="str"
+      />
     </el-select>
-    <el-select v-model="choosedTail" placeholder="选择韵尾" :size="props.size" style="width: 30%; min-width: 7em;">
-      <el-option v-for="(str, index) in tails" :key="index" :label="str" :value="str" />
+    <el-select
+      v-model="choosedTail"
+      placeholder="选择韵尾"
+      :size="props.size"
+      style="width: 30%; min-width: 7em;"
+    >
+      <el-option
+        v-for="(str, index) in tails"
+        :key="index"
+        :label="str"
+        :value="str"
+      />
     </el-select>
-    <el-button :icon="Search" :size="props.size" @click="sendHeadTail"
+    <el-button
+      :icon="Search"
+      :size="props.size"
       style="
         color: var(--el-color-info);
         background-color: var(--el-fill-color-light);
         border-color: var(--el-button-border-color);
-      " />
+      "
+      @click="sendHeadTail"
+    />
   </div>
 </template>
 
