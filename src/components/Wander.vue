@@ -141,20 +141,18 @@ useResizeObserver(cards, (entryContainer) => {
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.wander-view > :first-child, .wander-view > :last-child {
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 0;
+  gap: 8px;
 }
 
 #toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: nowrap;
 }
 
-#toolbar > span {
+#toolbar > * {
   display: inline-flex;
 }
 
@@ -162,7 +160,29 @@ useResizeObserver(cards, (entryContainer) => {
   white-space: nowrap;
 }
 
+#cardCounts .el-input-number {
+  width: 7rem;
+}
+
 #subDBFilter .el-select {
   width: 11rem;
+}
+
+@media (max-width: 650px) {
+  .wander-view {
+    margin: 0 12px;
+  }
+}
+
+@media (max-width: 470px) {
+  #toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  #toolbar > * > :nth-child(2) {
+    width: 100%;
+  }
 }
 </style>
