@@ -53,6 +53,8 @@ export default defineConfig({
       label: '页面导航',
       level: [2, 3],
     },
+
+    darkModeSwitchLabel: '切换主题'
   },
   vite,
 })

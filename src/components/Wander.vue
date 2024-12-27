@@ -78,7 +78,7 @@ useResizeObserver(cards, (entryContainer) => {
 </script>
 
 <template>
-  <div class="wander-view">
+  <div id="wander-results" class="results-view">
     <div
       id="toolbar"
       :style="{ width: `${cardWidth}px` }"
@@ -112,10 +112,7 @@ useResizeObserver(cards, (entryContainer) => {
         </el-select>
       </span>
     </div>
-    <el-space
-      ref="cards"
-      direction="vertical"
-    >
+    <el-space direction="vertical" ref="cards">
       <a
         v-for="entry in results"
         :key="entry.id"
@@ -137,14 +134,6 @@ useResizeObserver(cards, (entryContainer) => {
 </template>
 
 <style scoped>
-.wander-view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px 0;
-  gap: 8px;
-}
-
 #toolbar {
   display: flex;
   justify-content: space-between;
@@ -166,12 +155,6 @@ useResizeObserver(cards, (entryContainer) => {
 
 #subDBFilter .el-select {
   width: 11rem;
-}
-
-@media (max-width: 650px) {
-  .wander-view {
-    margin: 0 12px;
-  }
 }
 
 @media (max-width: 470px) {

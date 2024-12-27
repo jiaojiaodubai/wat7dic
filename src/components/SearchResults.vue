@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUrlSearchParams } from '@vueuse/core'
+import { useResizeObserver, useUrlSearchParams } from '@vueuse/core'
 import * as OpenCC from 'opencc-js'
 import { data as entries } from '../searchEntries.data'
 import DetailCard from './EntryCard.vue'
@@ -47,10 +47,20 @@ const results = computed(() => {
       || (griddle.value.head?.includes(entry.head) && griddle.value.tail === entry.tail)
   })
 })
+
+const cards = ref<HTMLElement | null>(null)
+const cardWidth = ref<number>(0)
+
+// 监听卡片尺寸变化,动态更改slider容器的宽度
+useResizeObserver(cards, (entryContainer) => {
+  if (entryContainer[0]) {
+    cardWidth.value = entryContainer[0].contentRect.width
+  }
+})
 </script>
 
 <template>
-  <div style="display: flex;justify-content: center;">
+  <div id="search-results" class="results-view">
     <template v-if="!results.length">
       <el-empty
         description="没有匹配的搜索结果"
@@ -60,29 +70,22 @@ const results = computed(() => {
     </template>
     <template v-else>
       <div
-        style="
-          display: flex;
-          flex-direction: column;
-        "
+        id="toolbar"
+        :style="{ width: `${cardWidth}px` }"
       >
-        <el-text
-          type="primary"
-          style="padding-top: 1rem;
-          padding-bottom: 1rem;
-        "
-        >
+        <el-text type="primary">
           共找到 {{ results.length }} 条结果
         </el-text>
-        <el-space direction="vertical">
-          <a
-            v-for="entry in results"
-            :key="entry.id"
-            :href="`./entry/${entry.id}`"
-          >
-            <DetailCard :entry="entry" />
-          </a>
-        </el-space>
       </div>
+      <el-space ref="cards" direction="vertical">
+        <a
+          v-for="entry in results"
+          :key="entry.id"
+          :href="`./entry/${entry.id}`"
+        >
+          <DetailCard :entry="entry" />
+        </a>
+      </el-space>
     </template>
   </div>
   <el-backtop
@@ -90,3 +93,10 @@ const results = computed(() => {
     :bottom="100"
   />
 </template>
+
+<style scoped>
+#toolbar {
+  display: flex;
+  justify-content: center;
+}
+</style>
