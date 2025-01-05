@@ -13,10 +13,14 @@ const { frontmatter } = useData()
 <template>
   <Layout>
     <template #home-hero-info-after>
-      <MainSearch style="padding-top: 32px; padding-bottom: 6px;" />
+      <ClientOnly>
+        <MainSearch style="padding-top: 32px; padding-bottom: 6px;" />
+      </ClientOnly>
     </template>
     <template #nav-bar-content-before>
-      <NavSearch v-if="frontmatter.showSearch === true" />
+      <ClientOnly>
+        <NavSearch v-if="frontmatter.showSearch === true" />
+      </ClientOnly>
     </template>
   </Layout>
 </template>

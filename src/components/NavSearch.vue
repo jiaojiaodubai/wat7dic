@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
-import { useUrlSearchParams, useWindowSize } from '@vueuse/core'
-import { useData, useRouter } from 'vitepress'
+import { useWindowSize } from '@vueuse/core'
+import { useRouter, withBase } from 'vitepress'
+import { computed, inject } from 'vue'
 import MainSearch from '../components/MainSearch.vue'
-import { toUrlTerm } from '../composables/utils'
 import HeadTailSearch from './HeadTailSearch.vue'
 import TextSearch from './TextSearch.vue'
 
@@ -12,35 +12,43 @@ const isMobile = computed(() => width.value < 900)
 
 const isOpenDrawer = ref(false)
 
-const params: SearchParma = useUrlSearchParams('history')
-// 为了方便地设置安全默认值
-const urlMethod = toRef(params, 'method', 'text')
-const urlTerm = toRef(params, 'term', '')
+const params = inject<SearchParma>('searchParams') as SearchParma
+const method = ref<SearchMethod>(params.method)
+const term = ref(params.term)
+const heads = ref<string[]>(params.heads)
+const tail = ref(params.tail)
 
-const text: Ref<string> = ref('')
-const heads: Ref<string[]> = ref([])
-const tail: Ref<string> = ref('')
-
-if (urlMethod.value === 'text') {
-  text.value = urlTerm.value
-}
-else if (urlMethod.value === 'headTail') {
-  heads.value = urlTerm.value.split(';')[0].split(',')
-  tail.value = urlTerm.value.split(';')[1]
-}
-
-watch([urlMethod, text, heads, tail], () => {
-  urlTerm.value = toUrlTerm(urlMethod.value, text.value, heads.value, tail.value)
-})
-
-const { site } = useData()
 const router = useRouter()
+// TODO: wait for https://github.com/vuejs/vitepress/issues/4461
+// let doSearch: () => void
+// onMounted(() => {
+//   doSearch = () => {
+//     const newUrl = withBase(`/searchResults?${new URLSearchParams({
+//       method: method.value,
+//       term: toUrlTerm(method.value, text.value, heads.value, tail.value),
+//     }).toString()}`)
+//     if (router.route.path === '/searchResults.html') {
+//       window.location.assign(newUrl)
+//     }
+//     else {
+//       router.go(newUrl)
+//     }
+//   }
+// })
 function doSearch() {
-  /* 使用自行维护的变量来构造路由参数，以便可以在详情页进行搜索 */
-  router.go(`.${site.value.base ? site.value.base : '/'}searchResults?${new URLSearchParams({
-    method: urlMethod.value,
-    term: toUrlTerm(urlMethod.value, text.value, heads.value, tail.value),
-  }).toString()}`)
+  if (router.route.path === withBase('/searchResults.html')) {
+    params.method = method.value
+    if (method.value === 'text') {
+      params.term = term.value
+    }
+    else if (method.value === 'headTail') {
+      params.heads = heads.value
+      params.tail = tail.value
+    }
+  }
+  else {
+    router.go(withBase('/searchResults'))
+  }
 }
 </script>
 
@@ -69,7 +77,7 @@ function doSearch() {
     class="VPNavBarSearch"
   >
     <el-select
-      v-model="urlMethod"
+      v-model="method"
       style="width: 110px"
     >
       <el-option
@@ -93,13 +101,13 @@ function doSearch() {
     </el-select>
     <el-divider direction="vertical" />
     <TextSearch
-      v-if="urlMethod === 'text'"
-      v-model="text"
+      v-if="method === 'text'"
+      v-model="term"
       class="search-module"
       @query="doSearch"
     />
     <HeadTailSearch
-      v-else-if="urlMethod === 'headTail'"
+      v-else-if="method === 'headTail'"
       v-model:heads="heads"
       v-model:tail="tail"
       class="search-module"

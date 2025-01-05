@@ -22,8 +22,9 @@ function updateUrl() {
 }
 
 function updateIds(reset: boolean = false) {
-  if (reset)
+  if (reset) {
     ids.value = []
+  }
   while (ids.value.length < cardCounts.value) {
     const randomIndex = Math.floor(Math.random() * entries.length)
     const entry = entries[randomIndex]
@@ -85,34 +86,38 @@ useResizeObserver(cards, (entryContainer) => {
     >
       <span id="cardCounts">
         <el-text>词条数量：</el-text>
-        <el-input-number
-          v-model="cardCounts"
-          :min="1"
-          :max="25"
-          @change="onCardCountsChange"
-        />
+        <ClientOnly>
+          <el-input-number
+            v-model="cardCounts"
+            :min="1"
+            :max="25"
+            @change="onCardCountsChange"
+          />
+        </ClientOnly>
       </span>
       <span id="subDBFilter">
         <el-text>子数据库：</el-text>
-        <el-select
-          v-model="subDBFilter"
-          multiple
-          clearable
-          collapse-tags
-          collapse-tags-tooltip
-          placeholder="选择子数据库"
-          @change="onSubDBFilterChange"
-        >
-          <el-option
-            v-for="label, key in subDBs"
-            :key="key"
-            :label="label"
-            :value="key"
-          />
-        </el-select>
+        <ClientOnly>
+          <el-select
+            v-model="subDBFilter"
+            multiple
+            clearable
+            collapse-tags
+            collapse-tags-tooltip
+            placeholder="选择子数据库"
+            @change="onSubDBFilterChange"
+          >
+            <el-option
+              v-for="label, key in subDBs"
+              :key="key"
+              :label="label"
+              :value="key"
+            />
+          </el-select>
+        </ClientOnly>
       </span>
     </div>
-    <el-space direction="vertical" ref="cards">
+    <el-space ref="cards" direction="vertical">
       <a
         v-for="entry in results"
         :key="entry.id"

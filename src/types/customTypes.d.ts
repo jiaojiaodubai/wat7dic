@@ -3,6 +3,8 @@ type QueryMethod = 'text' | 'headTail'
 interface SearchParma {
   method: QueryMethod
   term: string
+  heads: string[]
+  tail: string
 }
 
 type ELSize = 'large' | 'default' | 'small'
@@ -48,6 +50,7 @@ interface Entry {
   related: { [id: string]: string }
   pinyin: string
   jyutping: string
+  bbakLau: string
   head: string
   tail: string
   ref: string

@@ -8,35 +8,36 @@ const props = defineProps<{
 
 <template>
   <template v-for="part, index in props.list">
-    <el-text
-      v-if="typeof part === 'string'"
-      :key="`string-${index}`"
-      :size="size"
-      :type="type"
-    >
-      {{ part }}
-    </el-text>
-    <el-tooltip
-      v-else
-      :key="`object-${index}`"
-      placement="top-start"
-    >
-      <template #content>
-        <el-text
-          size="large"
-          type="primary"
-        >
-          {{ part.char }}
-        </el-text>
-      </template>
+    <template v-if="typeof part === 'string'">
       <el-text
-        tag="a"
-        :href="part.id"
+        :key="`string-${index}`"
         :size="size"
         :type="type"
       >
-        {{ part.char }}
+        {{ part }}
       </el-text>
-    </el-tooltip>
+    </template>
+    <template v-else>
+      <ClientOnly :key="`object-${index}`">
+        <el-tooltip placement="top-start">
+          <template #content>
+            <el-text
+              size="large"
+              type="primary"
+            >
+              {{ part.char }}
+            </el-text>
+          </template>
+          <el-text
+            tag="a"
+            :href="part.id"
+            :size="size"
+            :type="type"
+          >
+            {{ part.char }}
+          </el-text>
+        </el-tooltip>
+      </ClientOnly>
+    </template>
   </template>
 </template>

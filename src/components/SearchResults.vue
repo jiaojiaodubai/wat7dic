@@ -1,52 +1,75 @@
 <script setup lang="ts">
 import { useResizeObserver, useUrlSearchParams } from '@vueuse/core'
 import * as OpenCC from 'opencc-js'
+import { inject, watch } from 'vue'
 import { data as entries } from '../searchEntries.data'
 import DetailCard from './EntryCard.vue'
 
-const params: SearchParma = useUrlSearchParams('history')
-// 为了方便地设置安全默认值
-const method = toRef(params, 'method', 'text')
-const term = toRef(params, 'term', '')
+const results = ref<SearchEntry[]>([])
 
-function extract(regxp: RegExp) {
-  return term.value.match(regxp) || []
+const urlParams = useUrlSearchParams('history', { })
+const params = inject<SearchParma>('searchParams') as SearchParma
+function getFromUrlParams(key: string) {
+  const value = urlParams[key]
+  return Array.isArray(value) ? value[0] : value
+}
+if (urlParams.method || urlParams.term || urlParams.heads || urlParams.tail) {
+  params.method = getFromUrlParams('method') as SearchMethod
+  params.term = getFromUrlParams('term')
+  params.heads = getFromUrlParams('heads')?.split(',')
+  params.tail = getFromUrlParams('tail')
 }
 
-const griddle = computed(() => {
-  const griddle: {
+function extract(regxp: RegExp) {
+  return params.term.match(regxp) || []
+}
+const converter = OpenCC.Converter({ from: 'tw', to: 'cn' })
+
+watch(params, () => {
+  if (!params.method || !params.term)
+    return
+  urlParams.method = params.method
+  let griddle: {
     id?: string[]
     unicode?: string[]
     jyutping?: string[]
     characters?: string[]
+  } & {
     head?: string[]
     tail?: string
   } = {}
-  if (method.value === 'text') {
-    griddle.id = extract(/U\+[A-F\d]{4}-[a-z]+\d{0,2}|A\+[a-z]+\d{0,2}|[WP]\+\d+-([a-z]+\d{0,2})+/g)
-    griddle.unicode = extract(/U\+[A-F\d]{4}/g)
-    griddle.jyutping = extract(/[a-z]+\d{0,2}/g)
-    griddle.characters = extract(/[\u4E00-\u9FFF]+/g)
+  if (params.method === 'text') {
+    delete urlParams.heads
+    delete urlParams.tail
+    urlParams.term = params.term
+    griddle = {
+      id: extract(/U\+[A-F\d]{4}-[a-z]+\d{0,2}|A\+[a-z]+\d{0,2}|[WP]\+\d+-([a-z]+\d{0,2})+/g),
+      unicode: extract(/U\+[A-F\d]{4}/g),
+      jyutping: extract(/[a-z]+\d{0,2}/g),
+      characters: extract(/[\u4E00-\u9FFF]+/g),
+    }
+    results.value = entries.filter((entry) => {
+      return griddle.id?.includes(entry.id)
+        || griddle.unicode?.includes(entry.unicode)
+        || griddle.jyutping?.some(gPing => /\d+$/.test(gPing) ? gPing === entry.jyutping : gPing === entry.jyutping.replace(/\d+$/, ''))
+        || griddle.characters?.some(gChar =>
+          entry.characters.some(eCHar => converter(eCHar).includes(gChar)),
+        )
+    })
   }
-  else if (method.value === 'headTail') {
-    griddle.head = term.value.split(';')[0].split(',')
-    griddle.tail = term.value.split(';')[1]
+  else if (params.method === 'headTail') {
+    delete urlParams.term
+    urlParams.heads = params.heads?.join(',')
+    urlParams.tail = params.tail
+    griddle = {
+      head: params.heads,
+      tail: params.tail,
+    }
+    results.value = entries.filter((entry) => {
+      return griddle.head?.includes(entry.head) && griddle.tail === entry.tail
+    })
   }
-  return griddle
-})
-
-const converter = OpenCC.Converter({ from: 'tw', to: 'cn' })
-const results = computed(() => {
-  return entries.filter((entry) => {
-    return griddle.value.id?.includes(entry.id)
-      || griddle.value.unicode?.includes(entry.unicode)
-      || griddle.value.jyutping?.some(gPing => /\d+$/.test(gPing) ? gPing === entry.jyutping : gPing === entry.jyutping.replace(/\d+$/, ''))
-      || griddle.value.characters?.some(gChar =>
-        entry.characters.some(eCHar => converter(eCHar).includes(gChar)),
-      )
-      || (griddle.value.head?.includes(entry.head) && griddle.value.tail === entry.tail)
-  })
-})
+}, { immediate: true })
 
 const cards = ref<HTMLElement | null>(null)
 const cardWidth = ref<number>(0)

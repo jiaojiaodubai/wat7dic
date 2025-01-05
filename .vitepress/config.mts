@@ -54,7 +54,7 @@ export default defineConfig({
       level: [2, 3],
     },
 
-    darkModeSwitchLabel: '切换主题'
+    darkModeSwitchLabel: '切换主题',
   },
   vite,
 })

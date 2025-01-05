@@ -2,6 +2,7 @@ import type { Theme } from 'vitepress'
 import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/es/locale/lang/zh-cn'
 import DefaultTheme from 'vitepress/theme-without-fonts'
+import { searchParams } from '../../src/composables/utils'
 import CustomLayout from './LayoutPatcher.vue'
 import './style.css'
 import './custom.css'
@@ -16,5 +17,6 @@ export default {
     app.use(ElementPlus, {
       locale: zhCn,
     })
+    app.provide('searchParams', searchParams)
   },
 } satisfies Theme

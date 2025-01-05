@@ -1,28 +1,21 @@
 <script setup lang="ts">
-import type { Ref } from 'vue'
-import { useData, useRouter } from 'vitepress'
-import { toUrlTerm } from '../composables/utils'
+import { useRouter, withBase } from 'vitepress'
+import { inject } from 'vue'
 import HeadTailSearch from './HeadTailSearch.vue'
 import TextSearch from './TextSearch.vue'
 
-const method: Ref<QueryMethod> = ref('text')
-const text: Ref<string> = ref('')
-const heads: Ref<string[]> = ref([])
-const tail: Ref<string> = ref('')
+const params = inject<SearchParma>('searchParams') as SearchParma
 
-const { site } = useData()
 const router = useRouter()
+
 function doSearch() {
-  router.go(`.${site.value.base ? site.value.base : '/'}searchResults?${new URLSearchParams({
-    method: method.value,
-    term: toUrlTerm(method.value, text.value, heads.value, tail.value),
-  }).toString()}`)
+  router.go(withBase('/searchResults'))
 }
 </script>
 
 <template>
   <el-tabs
-    v-model="method"
+    v-model="params.method"
     type="card"
   >
     <el-tab-pane
@@ -30,7 +23,7 @@ function doSearch() {
       label="常规搜索"
     >
       <TextSearch
-        v-model="text"
+        v-model="params.term"
         size="large"
         class="search-module"
         @query="doSearch"
@@ -41,8 +34,8 @@ function doSearch() {
       label="声母+韵尾"
     >
       <HeadTailSearch
-        v-model:heads="heads"
-        v-model:tail="tail"
+        v-model:heads="params.heads"
+        v-model:tail="params.tail"
         size="large"
         class="search-module"
         @query="doSearch"

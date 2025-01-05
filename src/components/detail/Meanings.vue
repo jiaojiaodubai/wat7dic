@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useData } from 'vitepress'
-import { flatten } from '../../composables/utils'
+import { flattenTextList } from '../../composables/utils'
 import LinkedText from './LinkedText.vue'
 import Sentences from './Sentences.vue'
 
@@ -51,7 +51,7 @@ const entry = params.value?.entry as Entry
           type="info"
           size="large"
         >
-          {{ flatten(meaning.descriptions.en) }}
+          {{ flattenTextList(meaning.descriptions.en) }}
         </el-text>
       </div>
       <el-space
@@ -65,7 +65,7 @@ const entry = params.value?.entry as Entry
           class="word"
         >
           <div
-            v-if="flatten(word.format) !== entry.characters[0]"
+            v-if="flattenTextList(word.format) !== entry.characters[0]"
             class="word"
           >
             <div class="hanging">
@@ -76,7 +76,7 @@ const entry = params.value?.entry as Entry
                   round
                   style="font-size: 1rem;"
                 >
-                  {{ flatten(word.format) }}
+                  {{ flattenTextList(word.format) }}
                 </el-tag>
               </div>
               <div class="content">
@@ -87,7 +87,7 @@ const entry = params.value?.entry as Entry
                   />
                   <br>
                   <el-text type="info">
-                    {{ flatten(word.descriptions.en) }}
+                    {{ flattenTextList(word.descriptions.en) }}
                   </el-text>
                 </div>
                 <Sentences v-model="word.sentences" />

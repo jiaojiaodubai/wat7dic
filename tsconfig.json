@@ -13,6 +13,7 @@
       "@comp/*": ["./src/components/*"]
     },
     "resolveJsonModule": true,
+    "typeRoots": ["./node_modules/@types", "./src/types"],
 
     "allowJs": true,
     // "composite": true,

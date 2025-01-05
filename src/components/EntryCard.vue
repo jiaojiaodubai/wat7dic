@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { capitalize } from 'vue'
-import { flatten } from '../composables/utils'
+import { flattenTextList } from '../composables/utils'
 
 const props = defineProps<{
   entry: SearchEntry
@@ -8,7 +7,7 @@ const props = defineProps<{
 const codes = props.entry.unicode.match(/U\+[A-F\d]+/g)
 const words = Array.from(
   new Set(props.entry.words
-    .map(word => flatten(word))
+    .map(word => flattenTextList(word))
     .filter(word => word !== props.entry.characters[0])),
 ).join('；')
 </script>
@@ -61,7 +60,7 @@ const words = Array.from(
         label="声母"
         width="9rem"
       >
-        {{ capitalize(entry.head) }}
+        {{ entry.head }}
       </el-descriptions-item>
       <el-descriptions-item
         label="韵尾"

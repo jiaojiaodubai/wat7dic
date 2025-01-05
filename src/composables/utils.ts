@@ -1,21 +1,21 @@
-export function toUrlTerm(
-  method: QueryMethod,
-  text: string,
-  heads: string[],
-  tail: string,
-) {
-  switch (method) {
-    case 'text':
-      return text
-    case 'headTail':
-      return `${heads.join(',')};${tail}`
-  }
-}
+import { reactive } from 'vue'
 
-export function flatten(list: TextList) {
+const searchParams = reactive({
+  method: 'text',
+  heads: [],
+  tail: '',
+  term: '',
+})
+
+function flattenTextList(list: TextList) {
   return list.reduce((pre, cur) => {
     return typeof cur === 'string'
       ? pre + cur
       : pre + cur.char
   }, '')
+}
+
+export {
+  flattenTextList,
+  searchParams,
 }

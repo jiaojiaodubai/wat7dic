@@ -75,7 +75,7 @@ function sendHeadTail() {
       <el-option
         v-for="(str, index) in heads"
         :key="index"
-        :label="str"
+        :label="str === '0' ? '零声母' : str"
         :value="str"
       />
     </el-select>
