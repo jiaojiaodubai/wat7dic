@@ -13,7 +13,7 @@ export default {
   extends: DefaultTheme,
   // https://vitepress.dev/guide/custom-theme
   Layout: CustomLayout,
-  enhanceApp({ app, _router, _siteData }) {
+  enhanceApp({ app }) {
     app.use(ElementPlus, {
       locale: zhCn,
     })

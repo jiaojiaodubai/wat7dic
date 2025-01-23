@@ -13,7 +13,7 @@ const isMobile = computed(() => width.value < 900)
 const isOpenDrawer = ref(false)
 
 const params = inject<SearchParma>('searchParams') as SearchParma
-const method = ref<SearchMethod>(params.method)
+const method = ref<QueryMethod>(params.method)
 const term = ref(params.term)
 const heads = ref<string[]>(params.heads)
 const tail = ref(params.tail)
@@ -36,7 +36,7 @@ const router = useRouter()
 //   }
 // })
 function doSearch() {
-  if (router.route.path === withBase('/searchResults.html')) {
+  if (router.route.path === withBase('/searchResults')) {
     params.method = method.value
     if (method.value === 'text') {
       params.term = term.value
