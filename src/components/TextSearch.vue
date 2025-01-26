@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Search } from '@element-plus/icons-vue'
-import { useWindowSize } from '@vueuse/core'
 
 const props = defineProps<{
   size?: ELSize
@@ -11,10 +10,21 @@ const emits = defineEmits<{
 }>()
 
 const searchTerm = defineModel<string>({ required: true })
-const isSmallScreen = computed(() => {
-  const { width } = useWindowSize()
-  return width.value < 595
+const isSmallScreen = ref(false)
+
+function handleResize() {
+  isSmallScreen.value = window.innerWidth < 595
+}
+
+onMounted(() => {
+  window.addEventListener('resize', handleResize)
+  handleResize()
 })
+
+onUnmounted(() => {
+  window.removeEventListener('resize', handleResize)
+})
+
 const searchTip = '请输入汉字（如“玉”）、粤拼扩展（如“njuk9”）或Unicode（如“U+7389”）'
 
 function sendText() {
@@ -79,7 +89,7 @@ function sendText() {
   min-width: 542px;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 900px) {
   .text-input {
     min-width: 278px;
   }

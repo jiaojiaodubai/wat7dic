@@ -2,16 +2,10 @@
 import { useResizeObserver, useUrlSearchParams } from '@vueuse/core'
 import { data as entries } from '../searchEntries.data'
 import DetailCard from './EntryCard.vue'
+import SubDbFilter from './SubDbFilter.vue'
 
 const cardCounts = ref(5)
-const subDBs = {
-  Common: '通用字',
-  WriteableChars: '特色字',
-  WriteableWords: '特色词',
-  UnwriteableChars: '有音无字',
-  Pended: '写法待定',
-}
-const subDBFilter = ref<string[]>(Object.keys(subDBs))
+let subDbs = Array.from(new Set(entries.map(entry => entry.subDB)))
 
 const params = useUrlSearchParams()
 
@@ -29,7 +23,7 @@ function updateIds(reset: boolean = false) {
     const randomIndex = Math.floor(Math.random() * entries.length)
     const entry = entries[randomIndex]
     const randomId = entry.id
-    if (!ids.value.includes(randomId) && subDBFilter.value.includes(entry.subDB)) {
+    if (!ids.value.includes(randomId) && subDbs.includes(entry.subDB)) {
       ids.value.push(randomId)
     }
   }
@@ -55,10 +49,11 @@ function onCardCountsChange() {
   }
 }
 
-function onSubDBFilterChange() {
+function onSubDbsChange(newSubDbs: string[]) {
+  subDbs = newSubDbs
   ids.value = ids.value.filter((id: string) => {
     const entry = entries.find(entry => entry.id === id)
-    return entry && (subDBFilter.value.includes(entry.subDB))
+    return entry && (subDbs.includes(entry.subDB))
   })
   updateIds()
 }
@@ -95,27 +90,7 @@ useResizeObserver(cards, (entryContainer) => {
           />
         </ClientOnly>
       </span>
-      <span id="subDBFilter">
-        <el-text>子数据库：</el-text>
-        <ClientOnly>
-          <el-select
-            v-model="subDBFilter"
-            multiple
-            clearable
-            collapse-tags
-            collapse-tags-tooltip
-            placeholder="选择子数据库"
-            @change="onSubDBFilterChange"
-          >
-            <el-option
-              v-for="label, key in subDBs"
-              :key="key"
-              :label="label"
-              :value="key"
-            />
-          </el-select>
-        </ClientOnly>
-      </span>
+      <SubDbFilter @change="onSubDbsChange" />
     </div>
     <el-space ref="cards" direction="vertical">
       <a
