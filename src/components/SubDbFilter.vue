@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useUrlSearchParams } from '@vueuse/core'
 
+const emit = defineEmits(['change'])
+
 const params = useUrlSearchParams()
 
 const subDbs = {
@@ -17,14 +19,12 @@ const defaultSubDBs = params.subDBs
     : params.subDBs.split(',')
   : Object.keys(subDbs)
 
-const selected = ref<string[]>(defaultSubDBs)
+const selected = defineModel<string[]>({ required: true })
+selected.value = defaultSubDBs
 
-const emit = defineEmits<{
-  (e: 'change', subDBs: string[]): void
-}>()
 function onChange() {
   params.subDBs = selected.value.join(',')
-  emit('change', selected.value)
+  emit('change')
 }
 </script>
 

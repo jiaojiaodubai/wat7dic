@@ -36,7 +36,7 @@ const router = useRouter()
 //   }
 // })
 function doSearch() {
-  if (router.route.path === withBase('/searchResults')) {
+  if (router.route.path === withBase('/searchResults.html')) {
     params.method = method.value
     if (method.value === 'text') {
       params.term = term.value
@@ -47,7 +47,7 @@ function doSearch() {
     }
   }
   else {
-    router.go(withBase('/searchResults'))
+    router.go(withBase('/searchResults.html'))
   }
 }
 </script>

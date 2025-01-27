@@ -1,11 +1,14 @@
 <script setup lang="ts">
 import { useResizeObserver, useUrlSearchParams } from '@vueuse/core'
 import * as OpenCC from 'opencc-js'
-import { inject, watch } from 'vue'
+import { inject, useTemplateRef, watch } from 'vue'
 import { data as entries } from '../searchEntries.data'
 import DetailCard from './EntryCard.vue'
+import SubDbFilter from './SubDbFilter.vue'
 
 const results = ref<SearchEntry[]>([])
+
+const subDbs = ref<string[]>([])
 
 const urlParams = useUrlSearchParams('history')
 const params = inject<SearchParma>('searchParams') as SearchParma
@@ -18,12 +21,23 @@ params.term = getFromUrlParams('term') || params.term
 params.heads = getFromUrlParams('heads') ? getFromUrlParams('heads').split(',') : params.heads
 params.tail = getFromUrlParams('tail') || params.tail
 
+function onSubDbsChange(subDBs: string[]) {
+  results.value = results.value.filter((entry) => {
+    return subDBs.includes(entry.subDB)
+  })
+}
+
 function extract(regxp: RegExp): string[] {
   return params.term.match(regxp) || []
 }
 const converter = OpenCC.Converter({ from: 'tw', to: 'cn' })
 
 watch(params, () => {
+  if (subDbs.value.length !== 0) {
+    results.value = results.value.filter((entry) => {
+      return subDbs.value.includes(entry.subDB)
+    })
+  }
   urlParams.method = params.method
   if (params.method === 'text') {
     delete urlParams.heads
@@ -58,7 +72,7 @@ watch(params, () => {
   }
 }, { immediate: true })
 
-const cards = ref<HTMLElement | null>(null)
+const cards = useTemplateRef('cards')
 const cardWidth = ref<number>(0)
 
 // 监听卡片尺寸变化,动态更改slider容器的宽度
@@ -67,6 +81,8 @@ useResizeObserver(cards, (entryContainer) => {
     cardWidth.value = entryContainer[0].contentRect.width
   }
 })
+
+
 </script>
 
 <template>
@@ -86,6 +102,7 @@ useResizeObserver(cards, (entryContainer) => {
         <el-text type="primary">
           共找到 {{ results.length }} 条结果
         </el-text>
+        <SubDbFilter v-model="subDbs" @change="onSubDbsChange" />
       </div>
       <el-space ref="cards" direction="vertical">
         <a
@@ -109,6 +126,8 @@ useResizeObserver(cards, (entryContainer) => {
 <style scoped>
 #toolbar {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
 }
 </style>

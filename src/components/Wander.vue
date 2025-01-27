@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { useResizeObserver, useUrlSearchParams } from '@vueuse/core'
+import { useTemplateRef } from 'vue'
 import { data as entries } from '../searchEntries.data'
 import DetailCard from './EntryCard.vue'
 import SubDbFilter from './SubDbFilter.vue'
 
 const cardCounts = ref(5)
-let subDbs = Array.from(new Set(entries.map(entry => entry.subDB)))
+const subDbs = ref<string[]>([])
 
 const params = useUrlSearchParams()
 
@@ -23,7 +24,8 @@ function updateIds(reset: boolean = false) {
     const randomIndex = Math.floor(Math.random() * entries.length)
     const entry = entries[randomIndex]
     const randomId = entry.id
-    if (!ids.value.includes(randomId) && subDbs.includes(entry.subDB)) {
+    // 如果不对subDbs判断非空，则subDbs为空时，所有词条都会被过滤掉，导致ids无法填满，陷入死循环
+    if (!ids.value.includes(randomId) && subDbs.value.length !== 0 ? subDbs.value.includes(entry.subDB) : true) {
       ids.value.push(randomId)
     }
   }
@@ -49,11 +51,10 @@ function onCardCountsChange() {
   }
 }
 
-function onSubDbsChange(newSubDbs: string[]) {
-  subDbs = newSubDbs
+function onSubDbsChange() {
   ids.value = ids.value.filter((id: string) => {
     const entry = entries.find(entry => entry.id === id)
-    return entry && (subDbs.includes(entry.subDB))
+    return entry && ( subDbs.value.length !== 0 ? subDbs.value.includes(entry.subDB) : true )
   })
   updateIds()
 }
@@ -62,7 +63,7 @@ const results = computed(() => {
   return entries.filter(entry => ids.value.includes(entry.id))
 })
 
-const cards = ref<HTMLElement | null>(null)
+const cards = useTemplateRef('cards')
 const cardWidth = ref<number>(0)
 
 // 监听卡片尺寸变化,动态更改slider容器的宽度
@@ -90,7 +91,7 @@ useResizeObserver(cards, (entryContainer) => {
           />
         </ClientOnly>
       </span>
-      <SubDbFilter @change="onSubDbsChange" />
+      <SubDbFilter v-model="subDbs" @change="onSubDbsChange" />
     </div>
     <el-space ref="cards" direction="vertical">
       <a
@@ -131,10 +132,6 @@ useResizeObserver(cards, (entryContainer) => {
 
 #cardCounts .el-input-number {
   width: 7rem;
-}
-
-#subDBFilter .el-select {
-  width: 11rem;
 }
 
 @media (max-width: 470px) {
