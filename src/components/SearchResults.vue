@@ -79,6 +79,15 @@ useResizeObserver(cards, (entryContainer) => {
 
 <template>
   <div id="search-results" class="results-view">
+    <div
+      id="toolbar"
+      :style="{ width: `${cardWidth}px` }"
+    >
+      <el-text type="primary">
+        共找到 {{ results.length }} 条结果
+      </el-text>
+      <SubDbFilter v-model="subDbs" />
+    </div>
     <template v-if="!results.length">
       <el-empty
         description="没有匹配的搜索结果"
@@ -87,15 +96,6 @@ useResizeObserver(cards, (entryContainer) => {
       />
     </template>
     <template v-else>
-      <div
-        id="toolbar"
-        :style="{ width: `${cardWidth}px` }"
-      >
-        <el-text type="primary">
-          共找到 {{ results.length }} 条结果
-        </el-text>
-        <SubDbFilter v-model="subDbs" />
-      </div>
       <el-space ref="cards" direction="vertical">
         <a
           v-for="entry in results"
