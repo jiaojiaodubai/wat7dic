@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { useUrlSearchParams } from '@vueuse/core'
 
-const emit = defineEmits(['change'])
-
 const params = useUrlSearchParams()
 
 const subDbs = {
@@ -22,10 +20,10 @@ const defaultSubDBs = params.subDBs
 const selected = defineModel<string[]>({ required: true })
 selected.value = defaultSubDBs
 
-function onChange() {
+watch(selected, () => {
+  const params = useUrlSearchParams()
   params.subDBs = selected.value.join(',')
-  emit('change')
-}
+})
 </script>
 
 <template>
@@ -40,7 +38,6 @@ function onChange() {
         collapse-tags-tooltip
         placeholder="选择子数据库"
         style="width: 10.5em;"
-        @change="onChange"
       >
         <el-option
           v-for="label, key in subDbs"

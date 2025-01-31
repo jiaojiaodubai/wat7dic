@@ -51,13 +51,13 @@ function onCardCountsChange() {
   }
 }
 
-function onSubDbsChange() {
+watch(subDbs, () => {
   ids.value = ids.value.filter((id: string) => {
     const entry = entries.find(entry => entry.id === id)
-    return entry && ( subDbs.value.length !== 0 ? subDbs.value.includes(entry.subDB) : true )
+    return entry && (subDbs.value.length !== 0 ? subDbs.value.includes(entry.subDB) : true)
   })
   updateIds()
-}
+})
 
 const results = computed(() => {
   return entries.filter(entry => ids.value.includes(entry.id))

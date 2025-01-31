@@ -21,23 +21,12 @@ params.term = getFromUrlParams('term') || params.term
 params.heads = getFromUrlParams('heads') ? getFromUrlParams('heads').split(',') : params.heads
 params.tail = getFromUrlParams('tail') || params.tail
 
-function onSubDbsChange(subDBs: string[]) {
-  results.value = results.value.filter((entry) => {
-    return subDBs.includes(entry.subDB)
-  })
-}
-
 function extract(regxp: RegExp): string[] {
   return params.term.match(regxp) || []
 }
 const converter = OpenCC.Converter({ from: 'tw', to: 'cn' })
 
-watch(params, () => {
-  if (subDbs.value.length !== 0) {
-    results.value = results.value.filter((entry) => {
-      return subDbs.value.includes(entry.subDB)
-    })
-  }
+watch([params, subDbs], () => {
   urlParams.method = params.method
   if (params.method === 'text') {
     delete urlParams.heads
@@ -70,6 +59,11 @@ watch(params, () => {
       return griddle.heads.includes(entry.head) && griddle.tail === entry.tail
     })
   }
+  if (subDbs.value.length !== 0) {
+    results.value = results.value.filter((entry) => {
+      return subDbs.value.includes(entry.subDB)
+    })
+  }
 }, { immediate: true })
 
 const cards = useTemplateRef('cards')
@@ -81,8 +75,6 @@ useResizeObserver(cards, (entryContainer) => {
     cardWidth.value = entryContainer[0].contentRect.width
   }
 })
-
-
 </script>
 
 <template>
@@ -102,7 +94,7 @@ useResizeObserver(cards, (entryContainer) => {
         <el-text type="primary">
           共找到 {{ results.length }} 条结果
         </el-text>
-        <SubDbFilter v-model="subDbs" @change="onSubDbsChange" />
+        <SubDbFilter v-model="subDbs" />
       </div>
       <el-space ref="cards" direction="vertical">
         <a
