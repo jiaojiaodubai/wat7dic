@@ -37,7 +37,7 @@ watch(selected, () => {
         collapse-tags
         collapse-tags-tooltip
         placeholder="选择子数据库"
-        style="width: 10.5em;"
+        style="min-width: 10.5em;"
       >
         <el-option
           v-for="label, key in subDbs"

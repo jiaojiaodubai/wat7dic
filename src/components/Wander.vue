@@ -91,7 +91,7 @@ useResizeObserver(cards, (entryContainer) => {
           />
         </ClientOnly>
       </span>
-      <SubDbFilter v-model="subDbs" @change="onSubDbsChange" />
+      <SubDbFilter v-model="subDbs"/>
     </div>
     <el-space ref="cards" direction="vertical">
       <a
@@ -115,34 +115,7 @@ useResizeObserver(cards, (entryContainer) => {
 </template>
 
 <style scoped>
-#toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-
-#toolbar > * {
-  display: inline-flex;
-}
-
-#toolbar .el-text {
-  white-space: nowrap;
-}
-
 #cardCounts .el-input-number {
   width: 7rem;
-}
-
-@media (max-width: 470px) {
-  #toolbar {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 8px;
-  }
-
-  #toolbar > * > :nth-child(2) {
-    width: 100%;
-  }
 }
 </style>

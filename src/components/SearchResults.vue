@@ -83,7 +83,7 @@ useResizeObserver(cards, (entryContainer) => {
       id="toolbar"
       :style="{ width: `${cardWidth}px` }"
     >
-      <el-text type="primary">
+      <el-text type="primary" style="white-space: nowrap;">
         共找到 {{ results.length }} 条结果
       </el-text>
       <SubDbFilter v-model="subDbs" />
@@ -114,12 +114,3 @@ useResizeObserver(cards, (entryContainer) => {
     :bottom="100"
   />
 </template>
-
-<style scoped>
-#toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-}
-</style>
